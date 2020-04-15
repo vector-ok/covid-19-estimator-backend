@@ -15,31 +15,28 @@ app.use(morgan('common', {
 app.use(morgan(':method :url :status :response-time ms[0m'));
 
 
-// const dataInput2 = {
-//   region: {
-//     name: 'Africa',
-//     avgAge: 19.7,
-//     avgDailyIncomeInUSD: 5,
-//     avgDailyIncomePopulation: 0.71
-//   },
-//   periodType: 'days',
-//   timeToElapse: 58,
-//   reportedCases: 674,
-//   population: 66622705,
-//   totalHospitalBeds: 1380614
-// };
-
-// let dataParsed;
-//
-// console.log(userInput(dataInput2));
-//
-// // let dataInput2;
+const dataInput2 = {
+  region: {
+    name: 'Africa',
+    avgAge: 19.7,
+    avgDailyIncomeInUSD: 5,
+    avgDailyIncomePopulation: 0.71
+  },
+  periodType: 'days',
+  timeToElapse: 58,
+  reportedCases: 674,
+  population: 66622705,
+  totalHospitalBeds: 1380614
+};
 
 app.use('/api/v1/on-covid-19/xml', (req, res) => {
   // req.accepts('text/xml');
   res.set('Content-Type', 'text/xml');
   // res.type('text/xml');
-  const objResult = userInput();
+  const objResult = userInput(dataInput2);
+  const dataXml = o2x(objResult);
+  // res.send({ result: dataXml });
+
   res.send(o2x({
     '?xml version="1.0" encoding="utf-8"?' : null,
     clients: { client: objResult }
@@ -48,13 +45,16 @@ app.use('/api/v1/on-covid-19/xml', (req, res) => {
 
 app.use('/api/v1/on-covid-19/json', (req, res) => {
   const result = userInput(dataInput2);
-  res.json({ result: userInput() });
+  res.json({ result: userInput(dataInput2) });
 });
 
 app.use('/api/v1/on-covid-19', (req, res) => {
 
-  const result = userInput();
-  res.json({ result: userInput() });
+  const result = userInput(dataInput2);
+  res.json({ result: userInput(dataInput2) });
 });
+
+// morgan.token()
+
 
 module.exports = app;
